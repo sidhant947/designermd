@@ -1,7 +1,6 @@
-name: Publish to npm
+name: Manual npm Publish
 on:
-  release:
-    types: [published] # Triggers when you create a GitHub Release
+  workflow_dispatch: # This enables the manual "Run workflow" button
 
 jobs:
   publish:
@@ -12,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://npmjs.org'
           
       - run: npm ci
       
