@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>designermd — DESIGN.md for AI Projects</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000;
+    --fg: #fff;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  ::selection {
+    background: #fff;
+    color: #000;
+  }
+
+  a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--fg); transition: opacity 0.2s; }
+  a:hover { opacity: 0.7; }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  /* Animated background grid */
+  .bg-grid {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    opacity: 0.03;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Cursor glow */
+  .cursor-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 120px 0 80px;
+    border-bottom: 1px solid #222;
+    position: relative;
+  }
+
+  .logo {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeSlideUp 0.6s ease-out 0.2s forwards;
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeSlideUp 0.6s ease-out 0.4s forwards;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    opacity: 0;
+    max-width: 520px;
+    line-height: 1.5;
+    animation: fadeSlideUp 0.6s ease-out 0.6s forwards;
+  }
+
+  /* Install */
+  .install {
+    margin: 48px 0;
+    padding: 16px 20px;
+    border: 1px solid #333;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeSlideUp 0.6s ease-out 0.8s forwards;
+  }
+
+  .install::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; right: 0; bottom: 0;
+    width: 100%;
+    background: #fff;
+    transition: left 0.3s ease;
+    z-index: -1;
+  }
+
+  .install:hover::before {
+    left: 0;
+  }
+
+  .install:hover {
+    border-color: #fff;
+    color: #000;
+  }
+
+  .install code {
+    font-size: 16px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    letter-spacing: -0.5px;
+  }
+
+  .install .copy {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.4;
+    border: none;
+    transition: opacity 0.3s;
+  }
+
+  .install:hover .copy {
+    opacity: 0.8;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Sections */
+  section {
+    padding: 64px 0;
+    border-bottom: 1px solid #222;
+  }
+
+  section:last-child {
+    border-bottom: none;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -1px;
+    margin-bottom: 32px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    opacity: 0.4;
+    transition: opacity 0.3s;
+  }
+
+  .value:hover h3 {
+    opacity: 1;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.7;
+    opacity: 0.7;
+    margin-bottom: 16px;
+  }
+
+  /* Value props */
+  .values {
+    display: grid;
+    gap: 32px;
+    margin-top: 32px;
+  }
+
+  .value {
+    padding: 24px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+  }
+
+  .value::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+
+  .value:hover {
+    background: rgba(255,255,255,0.03);
+  }
+
+  .value:hover::before {
+    border-color: #333;
+  }
+
+  .value h4 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .value p {
+    font-size: 15px;
+    margin: 0;
+  }
+
+  /* What is DESIGN.md */
+  .design-md {
+    margin-top: 24px;
+    padding: 20px;
+    border-left: 2px solid #fff;
+    position: relative;
+  }
+
+  .design-md::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 100%;
+    background: #fff;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .design-md p {
+    opacity: 0.8;
+  }
+
+  /* Sections list */
+  .sections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 32px;
+    margin-top: 32px;
+  }
+
+  .section-item {
+    padding: 12px 0;
+    font-size: 15px;
+    opacity: 0.6;
+    border-bottom: 1px solid #111;
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+  }
+
+  .section-item::after {
+    content: '→';
+    position: absolute;
+    right: 0;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.3s ease;
+  }
+
+  .section-item:hover {
+    opacity: 1;
+    padding-left: 8px;
+  }
+
+  .section-item:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .section-item span {
+    opacity: 0.3;
+    margin-right: 8px;
+    font-size: 13px;
+    transition: opacity 0.3s;
+  }
+
+  .section-item:hover span {
+    opacity: 1;
+  }
+
+  /* Terminal demo */
+  .terminal {
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 24px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    margin-top: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .terminal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 32px;
+    background: #111;
+    border-bottom: 1px solid #333;
+  }
+
+  .terminal-dots {
+    position: relative;
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .terminal-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #333;
+  }
+
+  .terminal-line {
+    margin: 8px 0;
+    opacity: 0;
+    animation: typeIn 0.3s ease-out forwards;
+  }
+
+  .terminal-line .prompt {
+    opacity: 0.5;
+  }
+
+  .terminal-line .cmd {
+    color: #fff;
+  }
+
+  .terminal-line .output {
+    opacity: 0.6;
+  }
+
+  .terminal-line .success {
+    opacity: 1;
+  }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: #fff;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+
+  /* Counter animation */
+  .counter {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Footer */
+  footer {
+    padding: 48px 0;
+    font-size: 13px;
+    opacity: 0.3;
+    text-align: center;
+    transition: opacity 0.3s;
+  }
+
+  footer:hover {
+    opacity: 0.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .container { padding: 40px 20px; }
+    .hero { padding: 80px 0 60px; }
+    h1 { font-size: 32px; letter-spacing: -1px; }
+    h2 { font-size: 24px; }
+    .sections-grid { grid-template-columns: 1fr; }
+    .install { width: 100%; justify-content: center; }
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #fff;
+    color: #000;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Animations */
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes typeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Staggered animation delays for reveal elements */
+  .reveal:nth-child(2) { transition-delay: 0.1s; }
+  .reveal:nth-child(3) { transition-delay: 0.2s; }
+  .reveal:nth-child(4) { transition-delay: 0.3s; }
+
+  /* Value card stagger */
+  .value:nth-child(1) { transition-delay: 0s; }
+  .value:nth-child(2) { transition-delay: 0.1s; }
+  .value:nth-child(3) { transition-delay: 0.2s; }
+  .value:nth-child(4) { transition-delay: 0.3s; }
+
+  /* Section items stagger */
+  .section-item:nth-child(1) { transition-delay: 0s; }
+  .section-item:nth-child(2) { transition-delay: 0.05s; }
+  .section-item:nth-child(3) { transition-delay: 0.1s; }
+  .section-item:nth-child(4) { transition-delay: 0.15s; }
+  .section-item:nth-child(5) { transition-delay: 0.2s; }
+  .section-item:nth-child(6) { transition-delay: 0.25s; }
+  .section-item:nth-child(7) { transition-delay: 0.3s; }
+  .section-item:nth-child(8) { transition-delay: 0.35s; }
+  .section-item:nth-child(9) { transition-delay: 0.4s; }
+  .section-item:nth-child(10) { transition-delay: 0.45s; }
+  .section-item:nth-child(11) { transition-delay: 0.5s; }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="logo">designermd</div>
+    <h1>Give your AI projects a design system they can follow</h1>
+    <p class="subtitle">Analyze any website. Generate a DESIGN.md file. Let AI agents build with pixel-level consistency.</p>
+
+    <div class="install" onclick="copyInstall()">
+      <code>bun install -g designermd</code>
+      <span class="copy">copy</span>
+    </div>
+  </div>
+
+  <section class="reveal">
+    <h2>Why DESIGN.md matters for AI projects</h2>
+    <p>AI coding agents are fast — but without a design spec, they guess. DESIGN.md is the single source of truth that bridges design intent and AI execution.</p>
+    <p>It captures every decision a designer made: colors, typography, component styles, spacing, elevation, motion, accessibility rules, and design boundaries. AI agents read it. Your app stays consistent.</p>
+
+    <div class="design-md">
+      <p><strong>DESIGN.md is not documentation for humans.</strong> It's structured design intelligence that AI agents consume to make correct UI decisions — every time.</p>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <h2>What designermd gives you</h2>
+
+    <div class="values">
+      <div class="value reveal">
+        <h3>01</h3>
+        <h4>Reverse-engineer any design</h4>
+        <p>Point it at any URL. It fetches CSS, HTML, fonts, and extracts the complete design system automatically.</p>
+      </div>
+      <div class="value reveal">
+        <h3>02</h3>
+        <h4>11 sections of structured intelligence</h4>
+        <p>Colors, typography, components, layout, elevation, motion, accessibility, responsive rules, do's & don'ts, and agent-ready prompts.</p>
+      </div>
+      <div class="value reveal">
+        <h3>03</h3>
+        <h4>AI agents stay on design</h4>
+        <p>Feed DESIGN.md to any AI coding agent. They'll use the right colors, spacing, components, and patterns — no drift.</p>
+      </div>
+      <div class="value reveal">
+        <h3>04</h3>
+        <h4>Framework aware</h4>
+        <p>Detects Tailwind, Bootstrap, Material UI, Chakra, and more. Understands CSS variables, design tokens, and semantic roles.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <h2>What's inside DESIGN.md</h2>
+
+    <div class="sections-grid">
+      <div class="section-item"><span>01</span>Visual theme & atmosphere</div>
+      <div class="section-item"><span>02</span>Color palette & roles</div>
+      <div class="section-item"><span>03</span>Typography rules</div>
+      <div class="section-item"><span>04</span>Component styles</div>
+      <div class="section-item"><span>05</span>Layout principles</div>
+      <div class="section-item"><span>06</span>Depth & elevation</div>
+      <div class="section-item"><span>07</span>Motion & animation</div>
+      <div class="section-item"><span>08</span>Do's & don'ts</div>
+      <div class="section-item"><span>09</span>Responsive behavior</div>
+      <div class="section-item"><span>10</span>Accessibility</div>
+      <div class="section-item"><span>11</span>Agent prompt guide</div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <h2>How it works</h2>
+
+    <div class="terminal" id="terminal">
+      <div class="terminal-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="terminal-content">
+        <div class="terminal-line" style="animation-delay: 0.5s"><span class="prompt">$ </span><span class="cmd">designermd</span></div>
+        <div class="terminal-line" style="animation-delay: 1.2s"><span class="output">Enter website URL: <span class="success">https://linear.app</span></span></div>
+        <div class="terminal-line" style="animation-delay: 1.9s"><span class="output">→ Fetching website...</span></div>
+        <div class="terminal-line" style="animation-delay: 2.4s"><span class="output">✓ Found 16 stylesheets</span></div>
+        <div class="terminal-line" style="animation-delay: 2.9s"><span class="output">→ Analyzing design system...</span></div>
+        <div class="terminal-line" style="animation-delay: 3.6s"><span class="success">✓ DESIGN.md generated (9.3 KB)</span></div>
+        <div class="terminal-line" style="animation-delay: 4.1s"><span class="prompt">$ </span><span class="cursor-blink"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <h2>Install</h2>
+    <div class="install" onclick="copyInstall()">
+      <code>bun install -g designermd</code>
+      <span class="copy">copy</span>
+    </div>
+    <p style="margin-top: 24px;">Then run <strong style="opacity: 1;">designermd</strong> in your terminal and enter any URL.</p>
+  </section>
+
+  <footer>
+    <p>designermd — AI-powered design analyzer</p>
+    <p style="margin-top: 8px;"><a href="https://github.com/designermd">GitHub</a></p>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+// Cursor glow follow
+const glow = document.getElementById('cursorGlow');
+let mouseX = 0, mouseY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  glow.style.left = mouseX + 'px';
+  glow.style.top = mouseY + 'px';
+});
+
+// Scroll reveal
+const revealElements = document.querySelectorAll('.reveal');
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+revealElements.forEach(el => revealObserver.observe(el));
+
+// Copy to clipboard
+function copyInstall() {
+  navigator.clipboard.writeText('bun install -g designermd').then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+
+// Terminal animation restart on visibility
+const terminal = document.getElementById('terminal');
+const terminalLines = terminal.querySelectorAll('.terminal-line');
+
+const terminalObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      terminalLines.forEach(line => {
+        line.style.animation = 'none';
+        line.offsetHeight; // trigger reflow
+        line.style.animation = '';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+terminalObserver.observe(terminal);
+
+// Magnetic effect on install buttons
+document.querySelectorAll('.install').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = 'translate(0, 0)';
+  });
+});
+
+// Typing effect on hero subtitle - character highlight
+const subtitle = document.querySelector('.subtitle');
+if (subtitle) {
+  const text = subtitle.textContent;
+  subtitle.textContent = '';
+  subtitle.style.opacity = '1';
+
+  let i = 0;
+  const typeInterval = setInterval(() => {
+    if (i < text.length) {
+      subtitle.textContent += text[i];
+      i++;
+    } else {
+      clearInterval(typeInterval);
+    }
+  }, 20);
+}
+</script>
+
+</body>
+</html>
