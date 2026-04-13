@@ -1,0 +1,50 @@
+{
+  "name": "designermd",
+  "version": "1.0.0",
+  "description": "AI-powered CLI tool that analyzes any website URL and generates a comprehensive DESIGN.md file with 11 design system sections",
+  "main": "src/analyzer.js",
+  "bin": {
+    "designermd": "./bin/designermd.js"
+  },
+  "scripts": {
+    "start": "node bin/designermd.js",
+    "test": "node test/harness.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md"
+  ],
+  "keywords": [
+    "design",
+    "ai",
+    "design-system",
+    "cli",
+    "markdown",
+    "ui",
+    "ux",
+    "frontend",
+    "css",
+    "analyzer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/designermd"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/designermd#readme",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/designermd/issues"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cheerio": "^1.0.0-rc.12",
+    "figlet": "^1.7.0",
+    "node-fetch": "^2.7.0",
+    "prompts": "^2.4.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
