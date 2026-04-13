@@ -31,11 +31,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/designermd"
+    "url": "https://github.com/sidhant947/designermd"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/designermd#readme",
+  "homepage": "https://github.com/sidhant947/designermd#readme",
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/designermd/issues"
+    "url": "https://github.com/sidhant947/designermd/issues"
   },
   "dependencies": {
     "chalk": "^4.1.2",
